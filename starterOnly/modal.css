@@ -99,6 +99,18 @@ img {
     display: block;
     margin-top: -15px;
   }
+
+  .topnav a.icon {
+    color: #ff001b;
+  }
+  .topnav {
+    margin: 7.5%;
+  }
+
+  .header-logo img {
+    width: 103px;
+  }
+  
 } 
 
 main {
