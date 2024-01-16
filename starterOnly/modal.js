@@ -1,3 +1,5 @@
+Event.preventDefault()
+
 function editNav() {
   var x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
@@ -20,4 +22,10 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
+// launch thanks page
+function validate() {
+  const modalThanks = document.querySelector('.thanks');
+  modalThanks.style.display = "block";
+  document.querySelector('#formModal').style.display = "none"
+}
 
