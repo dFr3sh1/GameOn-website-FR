@@ -37,7 +37,7 @@ function closeModal() {
 function submitForm(event) {
   event.preventDefault();
 
-  // Validation logic (you can customize this as needed)
+  // Validation logic
   if (validateForm()) {
     formModal.style.display = "none";
     showModalThanks();
