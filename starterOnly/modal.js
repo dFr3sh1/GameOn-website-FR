@@ -46,66 +46,98 @@ function submitForm(event) {
 
 // Validation logic for the form
 function validateForm() {
-  const firstNameInput = document.getElementById('first');
-  const lastNameInput = document.getElementById('last');
-  const emailInput = document.getElementById('email');
-  const birthdateInput = document.getElementById('birthdate');
-  const quantityInput = document.getElementById('quantity');
-  const locationInputs = document.querySelectorAll('input[name="location"]');
-  const checkbox1Input = document.getElementById('checkbox1');
+  const formElements = [
+    'first',
+    'last',
+    'email',
+    'birthdate',
+    'quantity',
+    'location',
+    'checkbox1',
+  ];
 
   let isValid = true;
 
   // Reset previous error states
-  formData.forEach((element) => {
-    element.removeAttribute('data-error');
-    element.removeAttribute('data-error-visible');
+  formData.forEach((element) => resetErrorState(element));
+
+  // Validate each form element
+  formElements.forEach((elementId) => {
+    const inputElement = document.getElementById(elementId);
+    const validationFunction = validationRules[elementId];
+
+    if (!validationFunction(inputElement)) {
+      isValid = false;
+    }
   });
 
-  // Validate first name
-  if (firstNameInput.value.trim() === '') {
-    setValidationError(firstNameInput, 'Le prénom est requis.');
-    isValid = false;
-  }
-
-  // Validate last name
-  if (lastNameInput.value.trim() === '') {
-    setValidationError(lastNameInput, 'Le nom est requis.');
-    isValid = false;
-  }
-
-  // Validate email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(emailInput.value.trim())) {
-    setValidationError(emailInput, 'Veuillez saisir une adresse e-mail valide.');
-    isValid = false;
-  }
-
-  // Validate birthdate
-  if (birthdateInput.value.trim() === '') {
-    setValidationError(birthdateInput, 'La date de naissance est requise.');
-    isValid = false;
-  }
-
-  // Validate quantity (number of GameOn tournaments participated)
-  if (isNaN(quantityInput.value) || quantityInput.value < 0 || quantityInput.value > 99) {
-    setValidationError(quantityInput, 'Veuillez entrer un nombre valide.');
-    isValid = false;
-  }
-
-  // Validate location selection
-  if (!Array.from(locationInputs).some((input) => input.checked)) {
-    setValidationError(locationInputs[0], 'Veuillez sélectionner une ville.');
-    isValid = false;
-  }
-
-  // Validate checkbox1 (terms of use)
-  if (!checkbox1Input.checked) {
-    setValidationError(checkbox1Input.nextElementSibling, 'Vous devez accepter les conditions d\'utilisation.');
-    isValid = false;
-  }
-
   return isValid;
+}
+
+// Helper function to reset error state
+function resetErrorState(element) {
+  element.removeAttribute('data-error');
+  element.removeAttribute('data-error-visible');
+}
+
+// Validation rules for each form element
+const validationRules = {
+  first: (element) => validateRequired(element, 'Le prénom est requis.'),
+  last: (element) => validateRequired(element, 'Le nom est requis.'),
+  email: (element) => validateEmail(element, 'Veuillez saisir une adresse e-mail valide.'),
+  birthdate: (element) => validateRequired(element, 'La date de naissance est requise.'),
+  quantity: (element) => validateNumberRange(element, 0, 99, 'Veuillez entrer un nombre valide.'),
+  location: (element) => validateLocation(element, 'Veuillez sélectionner une ville.'),
+  checkbox1: (element) => validateCheckbox(element.nextElementSibling, 'Vous devez accepter les conditions d\'utilisation.'),
+};
+
+// Helper function to validate required fields
+function validateRequired(element, errorMessage) {
+  if (element.value.trim() === '') {
+    setValidationError(element, errorMessage);
+    return false;
+  }
+  return true;
+}
+
+// Helper function to validate email
+function validateEmail(element, errorMessage) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(element.value.trim())) {
+    setValidationError(element, errorMessage);
+    return false;
+  }
+  return true;
+}
+
+// Helper function to validate number range
+function validateNumberRange(element, min, max, errorMessage) {
+  const value = parseFloat(element.value);
+  if (isNaN(value) || value < min || value > max) {
+    setValidationError(element, errorMessage);
+    return false;
+  }
+  return true;
+}
+
+// Helper function to validate location
+function validateLocation(element, errorMessage) {
+  const locationInputs = document.querySelectorAll('input[name="location"]');
+  if (!Array.from(locationInputs).some((input) => input.checked)) {
+    setValidationError(locationInputs[0], errorMessage);
+    return false;
+  }
+  return true;
+}
+
+// Helper function to validate checkbox
+function validateCheckbox(element, errorMessage) {
+  const checkboxInput = element.previousElementSibling;
+  if (!checkboxInput.checked) {
+    setValidationError(element, errorMessage);
+    return false;
+  }
+  return true;
 }
 
 // Helper function to set validation error
