@@ -33,6 +33,13 @@ function closeModal() {
   formModal.reset(); // Reset form on close
 }
 
+//Added a event listener to close the modal pressing Esc key
+window.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeModal();
+  }
+});
+
 // Submit form event
 function submitForm(event) {
   event.preventDefault();
@@ -157,3 +164,4 @@ function showModalThanks() {
   closeModalBtn.addEventListener("click", closeModal);
   modalThanks.appendChild(closeModalBtn);
 }
+
