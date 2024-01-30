@@ -164,4 +164,3 @@ function showModalThanks() {
   closeModalBtn.addEventListener("click", closeModal);
   modalThanks.appendChild(closeModalBtn);
 }
-
