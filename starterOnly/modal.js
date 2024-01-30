@@ -89,8 +89,8 @@ function resetErrorState(element) {
 
 // Validation rules for each form element
 const validationRules = {
-  first: (element) => validateRequired(element, 'Le prénom est requis.'),
-  last: (element) => validateRequired(element, 'Le nom est requis.'),
+  first: (element) => validateMinLength(element, 2, 'Le prénom est requis et doit comporté au moins deux caractères.'),
+  last: (element) => validateMinLength(element, 2, 'Le nom est requis et doit comporté au moins deux caractères.'),
   email: (element) => validateEmail(element, 'Veuillez saisir une adresse e-mail valide.'),
   birthdate: (element) => validateRequired(element, 'La date de naissance est requise.'),
   quantity: (element) => validateNumberRange(element, 0, 99, 'Veuillez entrer un nombre valide.'),
@@ -101,6 +101,14 @@ const validationRules = {
 // Helper function to validate required fields
 function validateRequired(element, errorMessage) {
   if (element.value.trim() === '') {
+    setValidationError(element, errorMessage);
+    return false;
+  }
+  return true;
+}
+
+function validateMinLength(element, minLength, errorMessage) {
+  if (element.value.trim().length < minLength) {
     setValidationError(element, errorMessage);
     return false;
   }
