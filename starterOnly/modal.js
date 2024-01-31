@@ -72,25 +72,34 @@ function validateForm() {
   formElements.forEach((elementId) => {
     const inputElement = document.getElementById(elementId);
     const validationFunction = validationRules[elementId];
-
-    if (!validationFunction(inputElement)) {
+  
+    if (inputElement && validationFunction && !validationFunction(inputElement)) {
       isValid = false;
     }
+    // To collect data from the form
+    formData[elementId] = inputElement ? inputElement.value.trim() : '';
   });
+
+  // To display the data in the console
+  if (isValid) {
+    console.log(formData);
+  }
 
   return isValid;
 }
 
 // Helper function to reset error state
 function resetErrorState(element) {
-  element.removeAttribute('data-error');
-  element.removeAttribute('data-error-visible');
+  if (element) {
+    element.removeAttribute('data-error');
+    element.removeAttribute('data-error-visible');
+  }
 }
 
 // Validation rules for each form element
 const validationRules = {
-  first: (element) => validateNameLength(element, 2, 'Le prénom est requis et doit comporté au moins deux caractères.'),
-  last: (element) => validateNameLength(element, 2, 'Le nom est requis et doit comporté au moins deux caractères.'),
+  first: (element) => validateNameLength(element, 2, 'Le prénom est requis et doit comporter au moins deux caractères.'),
+  last: (element) => validateNameLength(element, 2, 'Le nom est requis et doit comporter au moins deux caractères.'),
   email: (element) => validateEmail(element, 'Veuillez saisir une adresse e-mail valide.'),
   birthdate: (element) => validateRequired(element, 'La date de naissance est requise.'),
   quantity: (element) => validateNumberRange(element, 0, 99, 'Veuillez entrer un nombre valide.'),
@@ -105,6 +114,7 @@ function validateRequired(element, errorMessage) {
     return false;
   }
   return true;
+  
 }
 
 function validateNameLength(element, minLength, errorMessage) {
