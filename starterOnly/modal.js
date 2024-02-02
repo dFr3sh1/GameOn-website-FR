@@ -81,9 +81,9 @@ function validateForm() {
   });
 
   // To display the data in the console
-  if (isValid) {
-    console.log(formData);
-  }
+  //if (isValid) {
+    //console.log(formData);
+  //}
 
   return isValid;
 }
@@ -174,6 +174,9 @@ function setValidationError(element, errorMessage) {
 
 // Show modal thanks
 function showModalThanks() {
+
+  displayFormData();
+
   modalThanks.style.display = "block";
 
   const closeModalBtn = document.createElement('button');
@@ -181,4 +184,36 @@ function showModalThanks() {
   closeModalBtn.textContent = "Fermer";
   closeModalBtn.addEventListener("click", closeModal);
   modalThanks.appendChild(closeModalBtn);
+}
+
+// For displaying the form data in the console
+function displayFormData() {
+  console.log("Form Data:");
+
+  const formElements = [
+    'first',
+    'last',
+    'email',
+    'birthdate',
+    'quantity',
+    'location',
+    'checkbox1',
+  ];
+
+  formElements.forEach((elementId) => {
+    const inputElement = document.getElementById(elementId);
+    const labelElement = document.querySelector(`label[for=${elementId}]`);
+
+    if (inputElement && labelElement) {
+      const label = labelElement.textContent;
+      let value = inputElement.value.trim();
+
+      // Custom display for checkbox1
+      if (elementId === 'checkbox1') {
+        value = inputElement.checked ? 'Validé' : 'Non validé';
+      }
+
+      console.log(`${label}: ${value}`);
+    }
+  });
 }
