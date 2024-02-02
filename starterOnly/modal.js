@@ -208,7 +208,7 @@ function displayFormData() {
       const label = labelElement.textContent;
       let value = inputElement.value.trim();
 
-      // Custom display for checkbox1
+      // For displaying Validé or Non validé in checkbox1 instead of on
       if (elementId === 'checkbox1') {
         value = inputElement.checked ? 'Validé' : 'Non validé';
       }
